@@ -1,0 +1,36 @@
+{
+  "name": "视频控制器",
+  "description": "Youtube网页视频播放控制器",
+  "manifest_version": 2,
+  "version": "0.0.1",
+  "icons": {
+    "128": "img/icon.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://www.youtube.com/"],
+      "js": ["content.js"]
+    }
+  ],
+  "commands": {
+    "nxt": {
+      "description": "下一个",
+      "global": true
+    },
+    // "prv": {
+    //   "description": "上一个",
+    //   "global": true
+    // },
+    "ply": {
+      "description": "播放/暂停",
+      "global": true
+    }
+  },
+  "permissions": ["tabs"]
+}
