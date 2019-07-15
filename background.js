@@ -14,19 +14,52 @@
 // }, { urls: ["<all_urls>"] }, ["blocking"]);
 
 chrome.commands.onCommand.addListener(function (command) {
+	setupYoutubeCommand(command);
+	setupXmlyCommand(command);
+});
+
+/**
+ * Youtube
+ */
+function setupYoutubeCommand(command) {
 	chrome.tabs.query({ url: '*://www.youtube.com/*' }, function (tabs) {
 		if (tabs.length === 0) {
-			chrome.tabs.create({ 'url': "https://www.youtube.com/", 'pinned': true });
 			return true;
 		}
 		var action = command;
-		if(command == 'ply'){
+		if (command == 'ply') {
 			action = 'ytp-play-button';
-		}else if(command == 'nxt'){
+		} else if (command == 'nxt') {
 			action = 'ytp-next-button'
 		}
 		console.log('action = ' + action);
 		var tab = tabs[0].id;
 		chrome.tabs.sendMessage(tab, action);
 	});
-});
+}
+var isPlay = false;
+/**
+ * 喜马拉雅
+ */
+function setupXmlyCommand(command) {
+	chrome.tabs.query({ url: '*://www.ximalaya.com/*' }, function (tabs) {
+		if (tabs.length === 0) {
+			return true;
+		}
+		var action = command;
+		if (command == 'ply') {
+			if (isPlay) {
+				action = 'pause';
+				isPlay = false;
+			} else {
+				action = 'play';
+				isPlay = true;
+			}
+		} else if (command == 'nxt') {
+			action = 'next'
+		}
+		console.log('action = ' + action);
+		var tab = tabs[0].id;
+		chrome.tabs.sendMessage(tab, action);
+	});
+}
